@@ -1,66 +1,69 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Laravel Functional Login System
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Este projeto implementa um sistema funcional de login com Laravel, incluindo registro, autenticação e controle de acesso. Ele foi desenvolvido como parte de um projeto de aprendizado para entender como implementar a autenticação no Laravel, utilizando o banco de dados para gerenciar usuários.
 
-## About Laravel
+## Funcionalidades
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+- **Página de Login**: Permite que o usuário se autentique com e-mail e senha.
+- **Página de Registro**: Permite que um novo usuário se registre fornecendo nome, e-mail, senha e confirmação de senha.
+- **Validação de Credenciais**: O sistema valida as credenciais de login e redireciona o usuário para a página inicial se as credenciais estiverem corretas.
+- **Hashing de Senha**: As senhas são armazenadas de forma segura utilizando o Bcrypt.
+- **Autenticação**: Utiliza o `Auth` do Laravel para gerenciar a autenticação do usuário.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Tecnologias Utilizadas
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+- **Laravel 8.x**: Framework PHP utilizado para o desenvolvimento do backend.
+- **MySQL**: Banco de dados utilizado para armazenar os usuários.
+- **Bootstrap 4**: Para estilização da interface de usuário.
 
-## Learning Laravel
+## Estrutura do Banco de Dados
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+A tabela `users` contém os seguintes campos:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+- `id`: Identificador único do usuário (auto-increment).
+- `name`: Nome do usuário.
+- `email`: E-mail do usuário (único).
+- `password`: Senha do usuário (armazenada com o algoritmo Bcrypt).
+- `created_at` e `updated_at`: Timestamps automáticos gerados pelo Laravel.
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Migration para a Tabela `users`
 
-## Laravel Sponsors
+```php
+Schema::create('users', function (Blueprint $table) {
+    $table->id();
+    $table->string('name');
+    $table->string('email')->unique();
+    $table->string('password');
+    $table->timestamps();
+});
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
 
-### Premium Partners
+Como Rodar o Projeto
+Clone o repositório: Para começar, clone o repositório na sua máquina:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+git clone https://github.com/vini3821/Laravel-Functional-Login-System.git
+Instale as dependências: Navegue até o diretório do projeto e execute o seguinte comando para instalar as dependências:
 
-## Contributing
+composer install
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Configure o Banco de Dados: Crie o banco de dados crud no MySQL e configure as credenciais no arquivo .env:
 
-## Code of Conduct
+env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=crud
+DB_USERNAME=root
+DB_PASSWORD=
+Execute as migrações: Execute as migrações para criar as tabelas no banco de dados:
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
 
-## Security Vulnerabilities
+php artisan migrate
+Inicie o Servidor: Execute o servidor embutido do Laravel para rodar a aplicação:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
-## License
+php artisan serve
+Acesse o sistema: Abra o navegador e acesse a URL fornecida, geralmente http://127.0.0.1:8000.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Licença
+Este projeto está licenciado sob a MIT License.
