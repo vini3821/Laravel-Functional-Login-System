@@ -96,7 +96,7 @@
             </div>
         @endif
 
-        <form action="{{ route('register') }}" method="POST">
+        <form action="{{url('/api/register') }}" method="POST">
             @csrf
 
             <label for="name">Nome:</label>

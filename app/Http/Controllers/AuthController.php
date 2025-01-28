@@ -35,7 +35,7 @@ class AuthController extends Controller
         return view('auth.register');
     }
 
-    public function register(Request $request)
+    public function registerUser(Request $request)
     {
         $validatedData = $request->validate([
             'name' => 'required|string|max:255',
@@ -49,7 +49,9 @@ class AuthController extends Controller
             'senha' => Hash::make($validatedData['senha']),
         ]);
 
-        return redirect()->route('login.form')->with('success', 'Usuário cadastrado com sucesso!');
+        //return redirect()->route('login.form')->with('success', 'Usuário cadastrado com sucesso!');
+        return response()->json(['message' => 'Usuário cadastrado com sucesso!'], 201);
+        
     }
 
     public function logout(Request $request)
