@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Models\crudUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use App\Models\User;
 
 class AuthController extends Controller
 {
@@ -12,24 +13,29 @@ class AuthController extends Controller
         return view('auth.login');
     }
 
-    public function login(Request $request)
+    public function loginUser(Request $request)
     {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'senha' => 'required',
-        ]);
 
-        if (auth()->attempt($credentials)) {
-            $request->session()->regenerate();
+    
+        // Tenta autenticar o usuário com as credenciais fornecidas
+        
+            $user = User::where('email', $request->email)->first();
 
-            return redirect()->intended('/home');
-        }
-
-        return back()->withErrors([
-            'email' => 'Credenciais Incorretas',
-        ])->onlyInput('email');
+            if (!$user || !Hash::check($request->senha, $user->senha)) {
+                return response()->json(['message' => 'Credenciais incorretas'], 401);
+            }
+    
+            // Gera o token de acesso para o usuário
+            $token = $user->createToken('Token de Acesso')->plainTextToken;
+            
+            // Retorna a resposta com o token
+            return response()->json([
+                'message' => 'Logado com sucesso',
+                'token' => $token,
+            ], 200);
+    
     }
-
+    
     public function showRegisterForm()
     {
         return view('auth.register');
