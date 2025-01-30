@@ -5,6 +5,9 @@ use App\Models\crudUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Http\Controllers\UserController;
+use Illuminate\Support\Facades\Auth;
+
 
 class AuthController extends Controller
 {
@@ -15,27 +18,27 @@ class AuthController extends Controller
 
     public function loginUser(Request $request)
     {
+        // Validação dos dados de entrada
+        $credentials = $request->validate([
+            'email' => 'required|email',
+            'senha' => 'required',
+        ]);
 
-    
-        // Tenta autenticar o usuário com as credenciais fornecidas
-        
-            $user = User::where('email', $request->email)->first();
+        // Verifica se o usuário existe e as credenciais estão corretas
+        $user = User::where('email', $credentials['email'])->first();
 
-            if (!$user || !Hash::check($request->senha, $user->senha)) {
-                return response()->json(['message' => 'Credenciais incorretas'], 401);
-            }
-    
-            // Gera o token de acesso para o usuário
-            $token = $user->createToken('Token de Acesso')->plainTextToken;
-            
-            // Retorna a resposta com o token
-            return response()->json([
-                'message' => 'Logado com sucesso',
-                'token' => $token,
-            ], 200);
-    
+        if (!$user || !Hash::check($credentials['senha'], $user->senha)) {
+            return redirect()->route('login')->withErrors(['email' => 'Credenciais incorretas.']);
+        }
+
+        // Autentica o usuário manualmente
+        Auth::login($user);
+
+        // Redireciona para a dashboard
+        return redirect()->route('dashboard')->with('success', 'Logado com sucesso!');
     }
-    
+
+
     public function showRegisterForm()
     {
         return view('auth.register');
@@ -57,7 +60,7 @@ class AuthController extends Controller
 
         //return redirect()->route('login.form')->with('success', 'Usuário cadastrado com sucesso!');
         return response()->json(['message' => 'Usuário cadastrado com sucesso!'], 201);
-        
+
     }
 
     public function logout(Request $request)
