@@ -29,6 +29,8 @@ Route::post('/logout', [AuthController::class, 'logout'])->name('logout'); // Lo
 Route::middleware(['auth'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard'); // Dashboard
     Route::get('/profile', [ProfileController::class, 'index'])->name('profile'); // Perfil do usuário
+    Route::middleware(['auth'])->put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+
 });
 
 // Rotas de gerenciamento de usuários
